@@ -1,0 +1,68 @@
+
+Extended E-mail Notification
+需要配置smtp服务器
+
+参数配置：
+Default Subject 
+$PROJECT_NAME - Build # $BUILD_NUMBER - $BUILD_STATUS!
+
+
+
+Default Content
+<!DOCTYPE html>    
+<html>    
+<head>    
+<meta charset="UTF-8">    
+<title>${ENV, var="JOB_NAME"}-${BUILD_NUMBER}Building Log Info</title>    
+</head>    
+    
+<body leftmargin="8" marginwidth="0" topmargin="8" marginheight="4"    
+    offset="0">    
+    <table width="95%" cellpadding="0" cellspacing="0"  style="font-size: 11pt; font-family: Tahoma, Arial, Helvetica, sans-serif">    
+        <tr>    
+            This mail is sent by Jenkins Autobuild system. Please don't reply!<br/>            
+            <td><font color="#CC0000">BuildResult - ${BUILD_STATUS}</font></td>   
+        </tr>    
+        <tr>    
+            <td><br />    
+            <b><font color="#0B610B">BuildInfo</font></b>    
+            <hr size="2" width="100%" align="center" /></td>    
+        </tr>    
+        <tr>    
+            <td>    
+                <ul>    
+                    <li>ProjectName ： ${PROJECT_NAME}</li>    
+                    <li>BuildNum    ： ${BUILD_NUMBER}</li>    
+                    <li>TriggerInfo ： ${CAUSE}</li>    
+                    <li>BuildStatus ： ${BUILD_STATUS}</li>    
+                    <li>BuildLog    ： <a href="${BUILD_URL}console">${BUILD_URL}console</a></li>    
+                    <li>Build Url   ： <a href="${BUILD_URL}">${BUILD_URL}</a></li>    
+                    <li>WorkSapce   ： <a href="${PROJECT_URL}ws">${PROJECT_URL}ws</a></li>    
+                    <li>Project Url ： <a href="${PROJECT_URL}">${PROJECT_URL}</a></li>    
+                </ul>    
+
+<h4><font color="#0B610B">Failure Test Case</font></h4>
+<hr size="2" width="100%" />
+$FAILED_TESTS<br/>
+
+<h4><font color="#0B610B">LatestCheckIn(#$SVN_REVISION)</font></h4>
+<hr size="2" width="100%" />
+<ul>
+${CHANGES_SINCE_LAST_SUCCESS, reverse=true, format="%c", changesFormat="<li>%d [%a] %m</li>"}
+</ul>
+CheckIn Changes Details: <a href="${PROJECT_URL}changes">${PROJECT_URL}changes</a><br/>
+
+            </td>    
+        </tr>    
+    </table>    
+</body>    
+</html>
+
+调用：
+   post{
+        always{
+            emailext attachLog: true,
+            body: '$DEFAULT_CONTENT',
+            subject: '$DEFAULT_SUBJECT', 
+            to: 'jgong@celestica.com'    
+        }
