@@ -1,0 +1,59 @@
+import hudson.*
+pipeline{
+    agent any 
+    stages{
+        stage("Download script sourcecode"){
+            steps{
+                script{
+                    environment { 
+                        http_proxy="10.204.112.11:3128"
+                        https_proxy="10.204.112.11:3128"
+                    }
+                    cleanWs()
+                    checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: '1fbe2446-440e-4bc6-9737-b0c44a686e5e', url: 'ssh://zzc0413292@10.204.82.253:29418/CLSRobot.git']]])
+                    git_commit=sh (script: '#!/bin/sh -e\n'+'git rev-parse --short HEAD', returnStdout: true).trim()
+                }
+            }
+        }
+        stage("docker push"){
+            steps{
+                script{
+                    tag_name=git_commit[0..5]
+                    test_unit="fenghuang-crobot-test-unit"
+                    svt_testcase_ver="v1.0"
+                    ip="10.204.82.253"
+                    port="81"
+                    project="cap_1"
+                    docker_name=sh (script: '#!/bin/bash -e\n'+"""echo $test_unit | sed "s/crobot-test/&-$svt_testcase_ver/g" """, returnStdout: true).trim()
+                    sh (script: '#!/bin/bash -e\n'+"""
+                        cp script/jenkins/Dockerfile .
+                        echo "############ Build docker image ############"
+                        docker build -t $docker_name .
+                        echo "############ tag docker image ############"
+                        echo "docker image name: $docker_name"
+                        docker images | grep ^$docker_name
+                        docker tag $docker_name $ip:$port/$project/$docker_name:$tag_name
+                        docker tag $ip:$port/$project/$docker_name:$tag_name $ip:$port/$project/$docker_name:latest
+                        echo "############ Docker push ############"
+                        docker push $ip:$port/$project/$docker_name
+                        echo "############ Finished ############"
+                    """)
+                    println "############ Remove local docker images ############"
+                    sh (script: '#!/bin/bash -e\n'+"""
+                        docker rmi $ip:$port/$project/$docker_name:$tag_name
+                        docker rmi $ip:$port/$project/$docker_name:latest
+                        docker rmi $docker_name
+                    """)
+                }
+            }
+        }
+    }
+    post{
+        always{
+            emailext attachLog: true,
+            body: '$DEFAULT_CONTENT',
+            subject: '$DEFAULT_SUBJECT', 
+            to: 'jgong@celestica.com'    
+        }
+    }
+}
