@@ -1,0 +1,538 @@
+#gerrit==================================================================================================================================
+git checkout -b 929切换到主分支
+ git cherry-pick   如果代码没拉到最新push失败，先把代码更新到最新然后用git log找到id用这个命令已经修改过就用这个命令后面加上ID就把提交不成功的代码拷贝过来了
+ 然后在git push
+ #g
+拉新本地的代码
+git log -3
+git reset --hard 
+git pull
+公司的git环境 需要把代码提交后评审分支，
+git push origin HEAD:refs/for/dev
+出现missing change-id的问题
+解决方法1:
+remote: gitdir=$(git rev-parse --git-dir); scp -p -P 29418 ****@*******:hooks/commit-msg ${gitdir}/hooks/ remote: and then amend the commit: remote: git commit --amend --no-edit remote: Finally, push your changes again
+
+先执行gitdir=$(git rev-parse --git-dir); scp -p -P 29418 ****@*******:hooks/commit-msg ${gitdir}/hooks/
+这是一个远程拷贝命令：把commit-msg文件拷贝到本地的.git/hooks目录下 通过这个脚本生成change-id的
+如果这句执行没问题，那最好了，
+但我公司git服务器为了安全，限制了scp，也就是git服务器拒绝访问，那就要浏览器输入：http://*****.com/tools/hooks/commit-msg 就会从git服务器上下载commit-msg文件，再把文件拷贝到.git/hooks目录下 再执行
+git commit --amend --no-edit
+再重新git add .
+git commit -m '注释
+git push origin head:refs/for/dev
+如果还是有问题，重新下载代码，把commit-msg文件拷贝到.git/hooks目录下，再新增代码并执行上述脚本。
+原文链接：https://blog.csdn.net/fupingfuping/article/details/109473163
+git commit -m "第一次提交"
+git push--------
+这是修改代码后的操作
+①git  diff
+②git commit --amend第二次的操作
+3：ctrl+0回车  然后ctrl+x回车
+4：git push ssh://zzc0425348@10.204.112.49:29418/CLSRobot.git HEAD:refs/for/master
+5：ok了
+
+============================================================================================================================================
+
+#django
+nohup python3 manage.py runserver 0.0.0.0:8000 &
+
+#docker
+docker pull ubuntu 
+$ docker run -it ubuntu /bin/bash
+
+
+$ docker ps -a
+$ docker start
+docker run -itd --name ubuntu-test ubuntu /bin/bash
+
+docker attach 1e560fca3906   ==================注意： 如果从这个容器退出，会导致容器的停止。
+docker exec -it 243c32535da7 /bin/bash ============================如果从这个容器退出，容器不会停止，这就是为什么推荐大家使用 docker exec 的原因。
+
+
+$ docker export 1e560fca3906 > ubuntu.tar
+导出容器 1e560fca3906 快照到本地文件 ubuntu.tar。这样将导出容器快照到本地文件。
+
+导入容器快照
+
+可以使用 docker import 从容器快照文件中再导入为镜像，以下实例将快照文件 ubuntu.tar 导入到镜像 test/ubuntu:v1:
+
+$ cat docker/ubuntu.tar | docker import - test/ubuntu:v1
+此外，也可以通过指定 URL 或者某个目录来导入，例如：
+
+$ docker import http://example.com/exampleimage.tgz example/imagerepo
+删除容器使用 docker rm 命令：
+
+$ docker rm -f 1e560fca3906
+下面的命令可以清理掉所有处于终止状态的容器。
+
+$ docker container prune
+docker pull training/webapp  # 载入镜像
+docker run -d -P training/webapp python app.py
+参数说明:
+
+-d:让容器在后台运行。
+
+-P:将容器内部使用的网络端口随机映射到我们使用的主机上
+
+docker pull training/webapp  # 载入镜像
+docker run -d -P training/webapp python app.py
+
+docker logs [ID或者名字] 可以查看容器内部的标准输出。
+docker run -d -p 5000:5000 training/webapp python app.py
+docker ps查看正在运行的容器
+查看WEB应用程序容器的进程
+我们还可以使用 docker top 来查看容器内部运行的进程
+
+查找镜像 docker search xxx
+
+普通用户授权
+sudo groupadd [unsername]
+
+sudo usermod -aG docker $USER[这里的$USER指的是当前用户]
+
+
+newgrp docker
+
+sudo systemctl start docker
+ps -ef|grep docker 
+运行docker helloworld
+docker version 
+docker run hello-world
+
+配置镜像加速器的配置
+daemon配置文件etc/docker/daemon-json
+启动docker
+systemctl start docker
+systemctl stop docker
+systemctl status docker
+查看docker的信息
+docker info --format '{{.Driver}}'
+docker info
+docker help[全部]
+docker  cp help
+# du
+:/var/lib/docker/overlay2
+du -s * | sort -n
+du -s * | sort -n | tail -n 30
+du -sh
+查找镜像
+docker search ubantu 
+拉取一个镜像
+docker pull ubantu
+
+
+========================================================================================================================
+#test5g
+AAbb1234
+root/QQww1234  
+11~16
+https://10.10.10.12/ui/#/host/vms   
+https://10.10.10.11/ui/#/host/vms/718  
+
+
+git push -u origin master
+
+#ip永久静态配置
+nameserver 10.204.28.8
+nameserver 8.8.8.8
+nameserver 8.8.4.4
+vim /ets/hosts/
+10.204.28.8 CSHADS11.asia.ad.celestica.com
+vim /etc/systemd/resolved.conf
+dns-nameservers 8.8.8.8 8.8.4.4 10.204.28.8
+DNS=10.204.28.8 8.8.8.8 8.8.4.4
+#FallbackDNS=
+#Domains=
+#LLMNR=no
+#MulticastDNS=no
+#DNSSEC=no
+#Cache=yes
+#DNSStubListener=yes
+
+
+vim /etc/hosts
+添加域名ip映射：
+10.204.28.8 CSHADS11.asia.ad.celestica.com
+ping CSHADS11.asia.ad.celestica.com
+
+
+
+
+####test5g
+AAbb1234
+root/QQww1234  
+11~16
+https://10.10.10.11    (do not use proxy !!!)
+
+#ens160,增加一个路由
+ifconfig ens160 10.204.112.49 netmask 255.255.254.0
+route add default gw 10.204.112.49
+
+
+
+=================================================================================================================================
+
+#Jenkins Shell===================================================================================================================
+pwd
+ls
+
+Password="123456"
+expect -c "
+spawn scp -r * automation@10.204.125.44:/home/automation/autotest/eta_source_code
+
+expect \"yes/no\"
+send \"yes\r\"
+expect \"password:\"
+send \"${Password}\r\"
+expect eof
+"
+=================================================================================================================================
+
+#ubantu==================================================
+https://blog.51cto.com/wljs/5325816
+ lsb_release -a  查看系统版本
+ getconf LONG_BIT 查看系统为多少位【32 or 64】
+ uname -a  查看操作系统骨架
+ ip addr
+ LTS版本的系统，网络配置
+ /etc/netplan
+ cat 50-cloud-init.yaml
+network:
+    ethernets:
+        ens160:
+            dhcp4: no
+            addresses:
+            - 10.204.112.49/23
+            gateway4: 10.204.112.1
+    version: 2
+===================================================================================================================================
+	network:
+    ethernets:
+        ens160:
+            dhcp4: no
+            addresses:
+            - 10.204.112.42/23
+            gateway4: 10.204.112.1
+            nameservers:
+                 addresses: [10.204.28.7]
+network:
+  version: 2
+  renderer: NetworkManager
+  ethernets:
+     ens33: #配置的网卡名称,使用ifconfig查看得到
+       dhcp4: no #dhcp4关闭
+       addresses: [192.168.31.100/24] #设置本机IP及掩码
+       gateway4: 192.168.31.2 #设置网关  跟vmware中的要一致，不然ping 不通百度
+       nameservers:
+         addresses: [8.8.8.8, 114.114.114.114] #设置DNS
+
+
+#[48]===============================================================================================================================
+network:
+  ethernets:
+    ens160:
+      dhcp4: no
+      addresses:
+      - 10.204.112.48/23
+      gateway4: 10.204.112.1
+  version: 2
+DNS=10.204.28.8 8.8.8.8 8.8.4.4
+
+127.0.0.1 localhost
+127.0.1.1 cshautomationtest2
+10.204.28.8 CSHADS11.asia.ad.celestica.com
+
+#[37]================================================================================================================================
+iface eth0 inet static
+address 10.204.112.37
+netmask 255.255.254.0
+gateway 10.204.112.1
+dns-nameservers 8.8.8.8
+
+DNS=10.204.28.8 8.8.8.8 8.8.4.4
+#FallbackDNS=
+#Domains=
+#LLMNR=no
+#MulticastDNS=no
+#DNSSEC=no
+#Cache=yes
+#DNSStubListener=yes
+
+127.0.0.1       localhost
+127.0.1.1       networking
+10.204.28.137 cshgitlab.cn-csh.celestica.com
+10.204.28.8 CSHADS11.asia.ad.celestica.com
+
+network:
+  version: 2
+  renderer: NetworkManager
+#[19]=================================================================================================================================
+
+auto lo
+iface lo inet loopback
+auto eno1
+iface eno1 inet dhcp
+auto eno2
+iface eno2 inet static
+address 10.204.112.19
+netmask 255.255.254.0
+gateway 10.204.112.1
+dns-nameservers 8.8.8.8 8.8.4.4 10.204.28.8
+
+DNS=10.204.28.8 8.8.8.8 8.8.4.4
+
+
+10.204.28.8 CSHADS11.asia.ad.celestica.com
+
+auto ens160
+iface ens160 inet static
+address 10.204.112.42
+netmask 255.0.0.0
+gatway 10.204.112.1
+broadcast 10.204.112.255
+dns-nameserver 10.204.28.8 10.193.18.139 10.205.60.21 8.8.8.8
+
+DNS=10.204.28.8 10.193.18.139 10.205.60.21
+
+
+127.0.0.1 localhost
+127.0.1.1 cshautomationtest
+#java
+zzyy8678@qq.com
+Ren723568@
+
+# docker proxy=========================================================================================================================
+
+cat /etc/systemd/system/docker.service.d/http-proxy.conf
+[Service]
+Environment="HTTP_PROXY=http://10.204.9.8:9090" 
+"HTTPS_PROXY=http://10.204.9.8:9090" 
+"NO_PROXY=localhost,127.0.0.1,10.204.112.43"
+=======================================================================================================================================
+
+
+##add route ip
+ip addr add 10.204.112.49/23 dev ens160		
+ip route add default gw 10.204.112.1
+
+##up端口
+ip link set ens160 up
+
+=======================================================================================================================================
+②修改配置文件：
+vim/etc/netplan/XXX
+network:
+    ethernets:F
+        ens160:
+            dhcp4: no
+            addresses:
+            - 10.204.112.49/23
+            gateway4: 10.204.112.1
+    version: 2
+加载网络：sudo netplan apply
+
+参考：
+https://www.jianshu.com/p/9e476763325f
+https://www.cnblogs.com/abeen/p/9355493.html
+
+
+#查看端口
+netstat -an
+netstat -anb查看哪个程序占用了端口
+
+
+jenken pipline==========================================================================================================================
+https://blog.csdn.net/lionwerson/article/details/124616977
+
+Password="123456"
+expect -c "
+spawn ssh root@10.204.125.44
+
+#expect \"yes/no\"
+#send \"yes\r\"
+expect \"password:\"
+send \"${Password}\r\"
+expect \"Last login:\"
+send \"pwd\r\"
+send \"cd /home/automation/autotest/eta_local\r\"
+send \"pwd\r\"
+expect eof
+
+
+#proxy===================================================================================================================================
+ENV http_proxy http://10.204.9.8:9090
+ENV https_proxy https://10.204.9.8:9090
+  
+#proxy
+export http_proxy=http://shrd:QQww4321@10.204.9.8:9090
+export https_proxy=http://shrd:QQww4321@10.204.9.8:9090
+export ftp_proxy=hhttp://shrd:QQww4321@10.204.9.8:9090
+export https_proxy=http://shrd:SH#Qw13#57@10.204.28.89:9090
+export http_proxy=http://shrd:SH#Qw13#57@10.204.28.89:9090
+export ftp_proxy=http://shrd:SH#Qw13#57@10.204.28.89:9090
+
+Environment="HTTP_PROXY=http://shrd:SH#Qw13#57@10.204.28.89:9090" 
+"HTTPS_PROXY=http://shrd:SH#Qw13#57@10.204.28.89:9090" 
+"NO_PROXY=localhost,127.0.0.1,10.204.112.43"
+work fine !!!:
+export https_proxy=http://shrd:SH#Qw13#57@10.204.28.89:9090
+export http_proxy=http://shrd:SH#Qw13#57@10.204.28.89:9090
+export ftp_proxy=http://shrd:SH#Qw13#57@10.204.28.89:9090
+
+export http_proxy=http://10.204.9.8:9090/
+export https_proxy=http://10.204.9.8:9090/
+
+
+
+#apt proxy
+
+sudo vim /etc/apt/apt.conf.d/proxy.conf   or    cd /etc/apt  vim apt.conf
+Acquire::http::proxy "http://10.204.9.8:9090/";
+Acquire::https::proxy "http://10.204.9.8:9090/";
+Acquire {HTTP::proxy "http://10.204.9.8:9090/"; HTTPS::proxy "http://10.204.9.8:9090/";ftp：：proxy "http://10.204.9.8:9090/"}
+
+
+
+#docker proxy
+systemctl status docker
+找到load:  cat /lib/........docker service的位置
+增加：
+Environment="https_proxy=http://shrd:SH#Qw13#57@10.204.28.89:9090"
+Environment="........."
+
+#wget proxy
+sudo vim /etc/wgetrc
+export https_proxy=http://shrd:SH#Qw13#57@10.204.28.89:9090
+export http_proxy=http://shrd:SH#Qw13#57@10.204.28.89:9090
+export ftp_proxy=http://shrd:SH#Qw13#57@10.204.28.89:9090
+
+#git proxy
+git config --global http.proxy 'http://shrd:SH#Qw13#57@10.204.28.89:9090'
+
+和
+git config --global https.proxy 'http://shrd:SH#Qw13#57@10.204.28.89:9090'
+
+
+
+#
+===============================================================================================================
+
+# 48 coverity
+pwd:/home/test/cov-platform/bin
+cmd:     ./cov-start-im  ./cov-stop-im
+
+license服务在37
+path:/home/jason/cov-analysis-linux64-2021.06/bin/license.lic
+cmd：
+./lmutil stat查看状态
+./lmutil lmdown  停止
+./lmgrd -c license.lic  启动
+#当前目录下执行这个命令
+ nohup ./lmgrd -c license.lic &
+ 
+ https://www.cnblogs.com/sddai/p/14681585.html
+#synopsys===================================================================================================
+https://community.synopsys.com/s/settings/0052H00000DyYtT
+aihuar@celestica.com
+passwd:QQww1234@
+
+============================================================================================================
+
+#jenkins 19
+ 
+/jenkins/jenkins_home/jenkin
+https://updates.jenkins.io/current/update-center.json
+http://updates.jenkins.io/current/update-center.json
+修改时区问题：
+System.setProperty('org.apache.commons.jelly.tags.fmt.timeZone', 'Asia/Shanghai')
+
+# jenkins 37
+https://blog.csdn.net/hudi2011/article/details/117440586
+path:/var/lib/jenkins  /usr/share/jenkins
+java path :/usr/lib/jvm/
+cmd :service jenkins restart
+
+
+#keytool
+keytool -importcert -trustcacerts -alias celestica_root_ca -file /etc/ssl/certs/ca-certificates.crt -keystore /usr/lib/jvm/java-1.8.0-openjdk-amd64/jre/lib/security/cacerts -storepass changeit -noprompt
+keytool -importcert -trustcacerts -alias celestica_root_ca -file /usr/lib/ca-certificates.crt -keystore /usr/lib/jvm/java-11-openjdk-11.0.18.0.10-2.el8_7.x86_64/lib/security/cacerts -storepass changeit -noprompt
+keytool -delete -alias celestica_root_ca_crt -keystore /usr/lib/jvm/java-11-openjdk-11.0.18.0.10-2.el8_7.x86_64/lib/security/cacerts -storepass changeit . 
+ocker exec -ti -u root b3a237dfec93 /bin/bash
+
+
+
+
+#docker registrator
+
+
+d.删除名称为none的镜像
+
+docker rmi -f $(docker images | grep “” | awk “{print $3}”)
+
+docker images | grep “” | awk “{print $3}”找到镜像的id
+
+docker info 查看详细信息
+
+docker system df查看存储信息状态
+
+docker system prune  命令可以用于清理磁盘，删除关闭的容器、无用的数据卷和网络，以及dangling镜像(即无tag的镜像)。
+docker system prune -a  命令清理得更加彻底，可以将没有容器使用Docker镜像都删掉。注意，这两个命令会把你暂时关闭的容器，
+以及暂时没有用到的Docker镜像都删掉了…所以使用之前一定要想清楚.。
+我没用过，因为会清理 没有开启的  Docker 镜像
+
+
+
+创建新的docker目录，执行命令df -h,找一个大的磁盘。 我在 /home目录下面建了 /home/docker/lib目录，执行的命令是：
+
+mkdir -p /home/docker/lib
+
+迁移/var/lib/docker目录下面的文件到 /home/docker/lib：
+
+rsync -avz /var/lib/docker /home/docker/lib/
+
+ 然后在 devicemapper.conf 写入：（同步的时候把父文件夹一并同步过来，实际上的目录应在 /home/docker/lib/docker ）
+
+[Service]
+ExecStart=
+ExecStart=/usr/bin/dockerd --graph=/home/docker/lib/docker
+
+du -Sh /var/lib/docker/overlay2 | sort -nr | head -n10
+
+du -s * | sort -n
+du -h --max-depth=1
+du -s * | sort -n | tail -n 30
+
+rm -rf ****选择删除一些
+
+ 
+error creating overlay mount to /var/lib/docker/overlay2/0312d0af799695a1b1640ea5390d96bae9890055a2d518609f144f97660b52a2-init/merged: no such file or directory
+
+
+vim /etc/docker/daemon-json
+ cat /etc/docker/daemon.json
+{ "insecure-registries" : ["10.204.29.5:5001", "10.204.112.43:5001", "10.204.112.43:8082", "10.204.82.253:81"],
+  "storage-driver": "devicemapper"  添加这个参数
+}
+vi daemon.json
+{
+  "storage-driver": "overlay2",
+  "storage-opts": [
+    "overlay2.override_kernel_check=true"
+  ]
+}
+systmctl deamon-reload
+
+systmctl restart docker
+ 
+ 
+ 
+ 
+ 
+ #158 jenkins
+ 
+ 
+ /home/jenkins
+ 
+ /home/aihua/.jenkins
+ nohup java -jar jenkins.war &
